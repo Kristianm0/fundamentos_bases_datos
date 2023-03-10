@@ -1,0 +1,130 @@
+--- ORDER BY HAVING 📌
+
+--- EJEMPLO 1
+
+SELECT *
+FROM posts
+ORDER BY fecha_publicacion ASC
+-- SELECT de todo
+-- FROM de posts
+-- ORDER BY fechas_publicacion de manera acendente.
+
+SELECT *
+FROM posts
+ORDER BY fecha_publicacion DESC
+-- Igual pero en ORDER BY, se ordena de manera descendiente.
+
+SELECT *
+FROM posts 
+ORDER BY titulo DESC
+--- Lo mismo, pero va a ordernar los datos de manera desceindinte por el titulo. 
+
+--- EJEMPLO 2
+SELECT MONTHNAME(fecha_publicacion) AS post_month, estatus, COUNT(*) AS post_quantity
+FROM posts
+GROUP BY estatus, post_month
+HAVING post_quantity >2
+ORDER BY post_month
+-- Selecionamos los datos que queremos, ponemos MONTHNAME para que nos de los nombre del mes, le cambiamos el nombre con AS, contamos con COUNT los post.
+-- Con FROM le decimos que busque donde queremos.
+-- GROUP BY los datos por estatus y post month.
+-- HAVING para muestre las columnas mayores a 2.
+-- Con ORDER BY ordenamos los datos de post month.
+
+--- EJEMPLO 3
+-- Agrupar los posts por fecha
+
+SELECT titulo, fecha_publicacion
+FROM posts
+GROUP BY fecha_publicacion
+ORDER BY fecha_publicacion
+LIMIT 10
+
+-- SELECT buscamos los datos que necesitemos.
+-- FROM de donde lo va a sacar.
+-- GROUP BY le decimos como lo va a agrupar con las fechas.
+-- ORDER BY que lo erdene de manera DESC que es por default.
+-- LIMIT para darle un limite de 10.
+
+--- EJEMPLO 4
+-- Agrupar los usuarios por categorias
+
+SELECT categorias.nombre AS nombre_categorias, usuarios.nickname AS nombre_usuario
+FROM categorias
+	LEFT JOIN usuarios ON usuarios.id = categorias.id
+GROUP BY nombre_categorias DESC
+
+-- SELECT para pedir los datos 
+-- FROM de le decimos donde.
+-- LEFT JOIN para traer los datos de dos tablas distintas. Le damos la primera tabla usuarios, ON para que traiga la columna que queremos usuarios.id que seria igual a categorias.id 
+-- Lo GROUP BY lo agrupamos por nombre de categoria de manera descendente.
+
+--- EJEMPLO 5
+
+-- Order los titulos de manera ASC y DESC
+
+SELECT titulo
+FROM posts
+ORDER BY titulo DESC
+-- Selecionamos el titulo que es asi como se llama la casilla en la tabla.
+-- Le decimos donde lo va a buscar con FROM posts.
+-- ORDER BY para ordernar los titulos de manera descendente.
+
+--- EJEMPLO 6
+-- Traer los posts con un limite de 10
+
+SELECT titulo, contenido, usuario_id
+FROM posts
+LIMIT 10
+
+-- EJEMPLO 7 
+- Traer los posts que tengan el titulo comenzando por q
+
+SELECT titulo
+FROM posts
+HAVING titulo LIKE 'Q%'
+-- SELECT el titulo porque no necesitamos mas nada.
+-- FROM los posts que es la tabla que necesitamos.
+-- HAVING que le decimos trae los titulos que con LIKE le decimos que aparezca algo como un texto le decimos que sea la q entre comillas y el signo de porcentaje (%) al final para que sea al comienzo la Q.
+
+--- EJEMPLO 8
+-- ¿Cuantas etiquetas tiene un blog post?
+
+SELECT posts.titulo, GROUP_CONCAT(nombre_etiqueta)
+FROM posts
+	INNER JOIN posts_etiquetas ON posts.id = posts_etiquetas.post_id
+	INNER JOIN etiquetas ON etiquetas.id = posts_etiquetas.etiqueta_id
+GROUP BY posts.id;
+ORDER BY num_etiquetas DESC
+
+-- SELECT las columnas de que necesitamos. 
+-- COUNT para contar los titulos de post.
+-- CONCAT hara que se separe por comas.
+-- FROM para decirle de donde va a sacar los datos.
+-- INNER JOIN para unir los post de etiqueta con los post id 
+-- INNER JOIN para unir la tabla etiqueta con etiqueta id.
+-- GROUP BY para agrupar por posts.id
+-- ORDER BY DESC ordenamos para que aparezca de manera desendente.
+
+
+--- EJEMPLO 9
+-- Cuales son las categorias que tiene más posts?
+
+SELECT c.nombre, COUNT(*) AS cant_post
+FROM categorias AS c
+INNER JOIN posts AS p ON c.id = p.categoria_id
+GROUP BY c.id
+ORDER BY cant_post DESC
+
+--SELECT los dato que queremos y le cambiamos el nombre
+-- FROM para decirle de donde sacara los datos y que le cambie el nombre a c para que sea mas facil.
+-- INNER JOIN para unir las tablas categoria y posts.
+-- GROUP BY para agrupar las categorias.
+-- ORDER BY para ordenar las categorias de posts.
+
+--- LIMIT 📌
+SELECT *
+FROM posts 
+ORDER BY fecha_publicacion ASC
+LIMIT 5
+-- lo mismo de arriba pero cambia dos cosas, que los va a ordernar de manera ascendente y que le pone un LIMIT que hace que se limite a 5 casillas.
